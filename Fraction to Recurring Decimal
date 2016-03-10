@@ -1,0 +1,49 @@
+/*
+Given two integers representing the numerator and denominator of a fraction, return the fraction in string format.
+
+If the fractional part is repeating, enclose the repeating part in parentheses.
+
+For example,
+
+Given numerator = 1, denominator = 2, return "0.5".
+Given numerator = 2, denominator = 1, return "2".
+Given numerator = 2, denominator = 3, return "0.(6)".
+
+*/
+
+%be sure to turn them into long type!!
+
+public class Solution {
+    public String fractionToDecimal(int numerator, int denominator) {
+        StringBuilder result=new StringBuilder();
+        long n=numerator;
+        long d=denominator;
+        if(n<0&&d>0) {result.append('-');n=-n;}
+        if(n>0&&d<0) {result.append('-');d=-d;}
+        result.append(n/d);
+        if(n%d==0) return result.toString();
+        result.append('.');
+        Set<Long> set=new HashSet<>();
+        List<Long> list=new ArrayList<>();
+        long mod=n%d;
+        boolean flag=false;
+        long rec=0;
+        while(mod!=0){
+            mod=mod*10;
+            if(set.contains(mod)) {rec=mod;flag=true;break;}
+            set.add(mod);
+            list.add(mod);
+            mod=mod%d;
+        }
+        int l=list.size();
+        for(int i=0;i<l;i++){
+            if(rec!=list.get(0)) {result.append(list.remove(0)/d);}
+            else break;
+        }
+        if(flag)    result.append('(');
+        for (long a:list)   {result.append(a/d);}
+        if(flag)    result.append(')');
+        return result.toString();
+        
+    }
+}
